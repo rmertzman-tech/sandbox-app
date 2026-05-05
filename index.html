@@ -3,410 +3,1040 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Ethics Beyond Boundaries — Course App Suite</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>EBB Final Exam Achievement App — Saint Petersburg College</title>
 <style>
+.skip-link{position:absolute;top:-100%;left:1rem;background:#0d5e57;color:#fff;
+  padding:.6rem 1.2rem;font-size:1rem;font-family:sans-serif;
+  border-radius:0 0 .35rem .35rem;z-index:9999;text-decoration:none;font-weight:600}
+.skip-link:focus{top:0}
 :root{
-  --teal:#0f766e;--teal-dark:#0d5e57;--teal-mid:#14b8a6;--teal-light:#ccfbf1;
-  --amber:#f59e0b;--amber-dark:#92400e;--amber-light:#fef3c7;
-  --navy:#1a2744;--ink:#1f2937;--muted:#6b7280;
-  --border:#e5e7eb;--paper:#f9fafb;
-  --sky:#1e3a8a;--sky-light:#dbeafe;
-  --green:#166534;--green-light:#dcfce7;
-  --red:#dc2626;--red-light:#fee2e2;
+  --bg:#f6f2ea;--paper:#fdfaf4;--ink:#1a1610;--ink2:#3a342a;
+  --muted:#6b6055;--border:#d4cec4;
+  --teal:#0d5e57;--teal-l:rgba(13,94,87,.1);--teal-ll:rgba(13,94,87,.05);
+  --amber:#8a3c0c;--amber-l:rgba(138,60,12,.1);
+  --red:#7f1d1d;--red-l:rgba(127,29,29,.08);
+  --green:#14532d;--green-l:rgba(20,83,45,.1);
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:'Courier New',monospace;
+  --body:1.2rem;--q-size:1.25rem;--lh:1.88;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cormorant Garamond','Georgia',serif;background:linear-gradient(135deg,#0a1628 0%,#112240 50%,#0a1628 100%);min-height:100vh;color:var(--ink)}
-.wrap{max-width:1000px;margin:0 auto;padding:1rem 1rem 3rem}
+html{font-size:16px;scroll-behavior:smooth}
+body{font-family:var(--serif);background:var(--bg);color:var(--ink);
+  line-height:var(--lh);font-size:var(--body);min-height:100vh}
+:focus-visible{outline:3px solid var(--teal);outline-offset:3px;border-radius:2px}
+.shell{max-width:760px;margin:0 auto;padding:0 1.5rem}
+.screen{display:none}.screen.active{display:block}
 
-/* HEADER */
-.site-header{text-align:center;padding:2.5rem 1rem 2rem;color:white}
-.site-header .label{font-family:'JetBrains Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;color:rgba(20,184,166,.75);margin-bottom:.5rem}
-.site-header h1{font-size:2.2rem;font-weight:700;color:white;margin-bottom:.4rem;line-height:1.15}
-.site-header .sub{font-size:1rem;color:rgba(255,255,255,.48);font-style:italic;margin-bottom:1rem}
-.site-header .desc{max-width:640px;margin:0 auto;font-size:.9rem;color:rgba(255,255,255,.55);line-height:1.7}
+/* Progress rail */
+.progress-rail{position:fixed;top:0;left:0;right:0;height:4px;
+  background:var(--border);z-index:100}
+.progress-fill{height:100%;background:var(--teal);transition:width .5s ease}
 
-/* CHAPTER GROUPS */
-.chapter-group{margin-bottom:2rem}
-.group-label{font-family:'JetBrains Mono',monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.12em;color:rgba(20,184,166,.65);margin-bottom:.6rem;padding-left:.1rem}
-.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem}
+/* Top bar */
+.top-bar{position:sticky;top:0;background:var(--paper);
+  border-bottom:1px solid var(--border);padding:.75rem 1.5rem;
+  z-index:50;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:.5rem}
+.top-bar-title{font-family:var(--sans);font-size:.875rem;font-weight:600;
+  color:var(--teal);letter-spacing:.02em}
+.top-bar-grade{font-family:var(--mono);font-size:.875rem;color:var(--ink2);
+  background:var(--teal-ll);border:1px solid var(--border);
+  padding:.3rem .75rem;border-radius:2rem}
 
-/* APP CARDS */
-.app-card{background:white;border-radius:.75rem;overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:transform .18s,box-shadow .18s;box-shadow:0 2px 12px rgba(0,0,0,.15)}
-.app-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(0,0,0,.25)}
-.app-card-head{padding:.9rem 1.1rem .7rem;display:flex;align-items:flex-start;gap:.7rem}
-.app-card-icon{font-size:1.5rem;line-height:1;flex-shrink:0;margin-top:.1rem}
-.app-card-title{font-size:1rem;font-weight:700;color:var(--navy);line-height:1.25;margin-bottom:.15rem}
-.app-card-type{font-family:'JetBrains Mono',monospace;font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
-.app-card-body{padding:0 1.1rem .9rem;flex:1}
-.app-card-desc{font-size:.82rem;color:var(--muted);line-height:1.6}
-.app-card-footer{padding:.55rem 1.1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
-.app-card-tag{font-family:'JetBrains Mono',monospace;font-size:.58rem;text-transform:uppercase;letter-spacing:.06em;padding:.18rem .5rem;border-radius:.25rem}
-.tag-case{background:var(--teal-light);color:var(--teal-dark)}
-.tag-companion{background:var(--sky-light);color:var(--sky)}
-.tag-simulation{background:var(--amber-light);color:var(--amber-dark)}
-.tag-reference{background:var(--paper);color:var(--muted);border:1px solid var(--border)}
-.tag-orientation{background:var(--green-light);color:var(--green)}
-.app-card-arrow{font-size:.9rem;color:var(--teal-mid)}
+/* Intro */
+.intro-wrap{min-height:100vh;display:flex;flex-direction:column;
+  justify-content:center;padding:4rem 1.5rem 3rem}
+.intro-badge{font-family:var(--sans);font-size:.85rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--teal);margin-bottom:1rem;font-weight:600;display:block}
+.intro-title{font-family:var(--serif);font-size:clamp(2rem,6vw,2.8rem);
+  line-height:1.15;color:var(--ink);margin-bottom:.6rem}
+.intro-sub{font-size:1.15rem;color:var(--muted);margin-bottom:2rem;
+  max-width:600px;line-height:1.7}
+.info-box{background:var(--paper);border:1px solid var(--border);
+  border-left:4px solid var(--teal);border-radius:.5rem;
+  padding:1.4rem 1.6rem;margin-bottom:1.5rem;max-width:640px}
+.info-box-label{font-family:var(--sans);font-size:.8rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--teal);
+  margin-bottom:.6rem;display:block}
+.info-box p{font-size:1.05rem;line-height:1.75;color:var(--ink2);margin-bottom:.75rem}
+.info-box p:last-child{margin-bottom:0}
+.grade-table{width:100%;border-collapse:collapse;font-size:1rem;margin:.75rem 0}
+.grade-table th,.grade-table td{padding:.6rem .9rem;text-align:left;
+  border:1px solid var(--border)}
+.grade-table th{background:var(--teal);color:#fff;
+  font-family:var(--sans);font-size:.85rem;font-weight:600}
+.grade-table td{background:var(--paper)}
+.grade-table tr:nth-child(even) td{background:var(--bg)}
 
-/* ACCENT BORDERS BY CHAPTER */
-.ch-orient .app-card-head{border-top:3px solid #0284c7}
-.ch-1 .app-card-head{border-top:3px solid #7c3aed}
-.ch-2 .app-card-head{border-top:3px solid #dc2626}
-.ch-3 .app-card-head{border-top:3px solid #0f766e}
-.ch-4 .app-card-head{border-top:3px solid #ca8a04}
-.ch-5 .app-card-head{border-top:3px solid #166534}
-.ch-6 .app-card-head{border-top:3px solid #0369a1}
-.ch-7 .app-card-head{border-top:3px solid #9333ea}
-.ch-8 .app-card-head{border-top:3px solid #92400e}
-.ch-9 .app-card-head{border-top:3px solid #0891b2}
-.ch-10 .app-card-head{border-top:3px solid #4f46e5}
-.ch-interlude .app-card-head{border-top:3px solid #0d5e57}
-.ch-rustbelt .app-card-head{border-top:3px solid #b45309}
-.ch-prologue .app-card-head{border-top:3px solid #6d28d9}
-.ch-11 .app-card-head{border-top:3px solid #0f766e}
-.ch-12 .app-card-head{border-top:3px solid #dc2626}
-.ch-13 .app-card-head{border-top:3px solid #1d4ed8}
-.ch-14 .app-card-head{border-top:3px solid #7c3aed}
-.ch-tools .app-card-head{border-top:3px solid #374151}
+/* Form */
+label{display:block;font-family:var(--sans);font-size:1rem;
+  font-weight:600;color:var(--ink);margin-bottom:.5rem}
+input[type="text"]{width:100%;max-width:480px;border:2px solid var(--border);
+  border-radius:.4rem;padding:.75rem 1rem;font-family:var(--serif);
+  font-size:var(--body);color:var(--ink);background:var(--paper);
+  transition:border-color .15s}
+input[type="text"]:focus{border-color:var(--teal);outline:none}
+textarea{width:100%;border:2px solid var(--border);border-radius:.4rem;
+  padding:1rem 1.1rem;font-family:var(--serif);font-size:var(--body);
+  color:var(--ink);background:var(--paper);resize:vertical;min-height:160px;
+  line-height:var(--lh);transition:border-color .15s}
+textarea:focus{border-color:var(--teal);outline:none}
+textarea::placeholder{color:var(--muted);font-style:italic}
 
-/* DIVIDER */
-.divider{height:1px;background:rgba(255,255,255,.07);margin:1.5rem 0}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.5rem;
+  font-family:var(--sans);font-size:1rem;font-weight:600;
+  padding:.7rem 1.6rem;border-radius:.4rem;border:2px solid transparent;
+  cursor:pointer;transition:all .15s;text-decoration:none}
+.btn-primary{background:var(--teal);color:#fff;border-color:var(--teal)}
+.btn-primary:hover{background:#0a4d47}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed}
+.btn-ghost{background:transparent;color:var(--teal);border-color:var(--teal)}
+.btn-ghost:hover{background:var(--teal-l)}
+.btn-sm{font-size:.9rem;padding:.5rem 1.1rem}
+.btn-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem;align-items:center}
 
-/* PREDICTION CHAIN */
-.chain-bar{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:.65rem;padding:1rem 1.25rem;margin-bottom:1.5rem}
-.chain-bar h3{font-size:.75rem;font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:rgba(20,184,166,.65);margin-bottom:.65rem}
-.chain-row{display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
-.chain-node{font-family:'JetBrains Mono',monospace;font-size:.65rem;background:rgba(255,255,255,.07);color:rgba(255,255,255,.65);padding:.22rem .55rem;border-radius:.3rem;white-space:nowrap}
-.chain-arrow{color:rgba(20,184,166,.5);font-size:.85rem}
+/* Question screen */
+.q-screen{padding:2rem 0 5rem}
+.domain-header{padding:2rem 0 1.5rem;border-bottom:1px solid var(--border);margin-bottom:2rem}
+.domain-badge{font-family:var(--sans);font-size:.82rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  margin-bottom:.5rem;display:block}
+.domain-title{font-family:var(--serif);font-size:1.75rem;color:var(--ink);
+  line-height:1.2;margin-bottom:.35rem}
+.domain-sub{font-size:1.05rem;color:var(--muted);font-style:italic}
+.level-badge{display:inline-block;font-family:var(--sans);font-size:.8rem;
+  font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:.3rem .8rem;border-radius:2rem;margin-bottom:1rem}
+.lv-r{background:var(--teal-l);color:var(--teal)}
+.lv-a{background:var(--amber-l);color:var(--amber)}
+.lv-i{background:var(--red-l);color:var(--red)}
+.question-text{font-size:var(--q-size);line-height:1.85;color:var(--ink);
+  margin-bottom:1.5rem;padding:1.4rem 1.6rem;background:var(--paper);
+  border:1px solid var(--border);border-radius:.5rem;white-space:pre-wrap}
+.char-count{font-family:var(--mono);font-size:.85rem;color:var(--muted);
+  text-align:right;margin-top:.35rem}
+
+/* Companion */
+.companion-region{background:var(--teal-ll);border:1px solid rgba(13,94,87,.25);
+  border-radius:.5rem;padding:1.4rem 1.6rem;margin:1.5rem 0;display:none}
+.companion-region.visible{display:block}
+.companion-header{font-family:var(--sans);font-size:.82rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--teal);
+  margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.companion-header::before{content:'';width:8px;height:8px;border-radius:50%;
+  background:var(--teal);flex-shrink:0}
+.companion-verdict{font-family:var(--sans);font-size:.9rem;font-weight:700;
+  padding:.35rem .85rem;border-radius:2rem;display:inline-block;margin-bottom:.75rem}
+.vd{background:var(--green-l);color:var(--green)}
+.vp{background:var(--amber-l);color:var(--amber)}
+.vn{background:var(--red-l);color:var(--red)}
+.companion-text{font-size:var(--body);line-height:var(--lh);color:var(--ink2)}
+.thinking{font-style:italic;color:var(--muted);font-size:1.05rem}
+
+/* Progress map */
+.progress-map{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:1.5rem 0}
+@media(max-width:520px){.progress-map{grid-template-columns:1fr 1fr}}
+.domain-cell{padding:.6rem .75rem;border:1px solid var(--border);
+  border-radius:.4rem;background:var(--paper);font-family:var(--sans);font-size:.82rem}
+.domain-cell-name{font-weight:700;color:var(--ink2);margin-bottom:.35rem;font-size:.82rem}
+.pip-row{display:flex;gap:.25rem;flex-wrap:wrap}
+.pip{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);
+  font-size:.65rem;font-weight:700;display:flex;align-items:center;
+  justify-content:center;color:var(--muted);font-family:var(--sans)}
+.pip.done{background:var(--teal);border-color:var(--teal);color:#fff}
+.pip.partial{background:var(--amber-l);border-color:var(--amber);color:var(--amber)}
+.pip.current{border-color:var(--teal);color:var(--teal);border-width:3px}
+
+/* Completion */
+.completion-wrap{padding:3rem 0 5rem}
+.grade-reveal{background:var(--paper);border:3px solid var(--teal);
+  border-radius:.75rem;padding:2rem 2.4rem;margin:1.5rem 0;text-align:center}
+.grade-letter{font-family:var(--serif);font-size:5rem;color:var(--teal);
+  line-height:1;margin-bottom:.35rem;font-weight:normal}
+.grade-label{font-family:var(--sans);font-size:1rem;color:var(--muted);
+  font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.competency-report{background:var(--paper);border:1px solid var(--border);
+  border-radius:.5rem;padding:1.8rem 2rem;margin:1.5rem 0}
+.report-domain{margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border)}
+.report-domain:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.report-domain-title{font-family:var(--sans);font-size:1rem;font-weight:700;
+  color:var(--teal);margin-bottom:.75rem}
+.report-item{margin-bottom:.75rem}
+.report-item-level{font-family:var(--sans);font-size:.8rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+  margin-bottom:.25rem;display:flex;align-items:center;gap:.5rem}
+.rv{font-family:var(--sans);font-size:.75rem;font-weight:700;
+  padding:.15rem .5rem;border-radius:1rem}
+.report-item-response{font-size:1rem;color:var(--ink2);line-height:1.75;
+  font-style:italic;border-left:3px solid var(--border);
+  padding-left:.9rem;margin-top:.3rem}
+.token-box{background:#1a1610;color:#e8e3d8;border-radius:.5rem;
+  padding:1.2rem 1.4rem;margin:1rem 0;font-family:var(--mono);font-size:.82rem;
+  word-break:break-all;line-height:1.6;max-height:160px;overflow-y:auto;
+  border:1px solid #333}
+.token-instructions{background:var(--amber-l);border:1px solid rgba(138,60,12,.25);
+  border-radius:.5rem;padding:1rem 1.2rem;margin:1rem 0;
+  font-size:1.05rem;line-height:1.75;color:var(--amber)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.spacer{height:1.5rem}
+hr.divider{border:none;border-top:1px solid var(--border);margin:2rem 0}
+.prev-wrap{margin-bottom:1rem}
+.prev-label{font-family:var(--sans);font-size:.85rem;color:var(--muted);margin-bottom:.4rem}
+.prev-text{font-size:1rem;color:var(--ink2);font-style:italic;
+  border-left:3px solid var(--border);padding-left:.9rem;line-height:1.75}
+@media print{
+  .progress-rail,.top-bar,.btn-row,.skip-link,
+  .companion-region,.token-box,.token-instructions{display:none!important}
+  .competency-report{border:1px solid #ccc}
+  body{background:white;font-size:12pt}
+}
 </style>
 </head>
 <body>
-<div class="wrap">
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<div class="progress-rail" role="progressbar" aria-label="Exam progress"
+  aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+<main id="main-content">
 
-<div class="site-header">
-  <div class="label">Saint Petersburg College &middot; Ethics Institute</div>
-  <h1>Ethics Beyond Boundaries</h1>
-  <div class="sub">Interactive App Suite &middot; Dr. Robert Mertzman</div>
-  <div class="desc">A complete set of simulation apps, case explorers, and companion reading tools for the EBB course. Each app connects to the UCP simulation engine and stores journal predictions for the next chapter.</div>
+<!-- ═══ INTRO ═══════════════════════════════════════════════════════════ -->
+<div id="screen-intro" class="screen active">
+<div class="intro-wrap"><div class="shell">
+  <span class="intro-badge">Ethics Beyond Boundaries &middot; Saint Petersburg College &middot; Final Exam</span>
+  <h1 class="intro-title">EBB Final Exam<br>Achievement App</h1>
+  <p class="intro-sub">A mastery-based final exam. Six concept domains. Three levels each. Work at your own pace, retry any question, and submit when you are satisfied with your grade.</p>
+
+  <div class="info-box">
+    <span class="info-box-label">How this works</span>
+    <p>You will work through six concept areas from the Ethics Beyond Boundaries course. In each area you answer three questions: one that checks whether you can identify and explain the concept, one that checks whether you can apply it to a real case, and one that asks you to connect it to your own experience.</p>
+    <p>Before you write, you will see a teal box titled <strong>"What the Companion looks for in a complete response."</strong> Read this before you write — it tells you exactly what a complete answer includes. The Companion's assessment is based on those criteria, so knowing them upfront is part of how this works.</p>
+    <p>After you submit, the Companion will tell you what you demonstrated and — if something is missing — ask you a specific question to help you add it. This is a conversation, not a test. The Companion will never tell you that you "forgot" something or "should have included" something that wasn't in the guidance. If it asks a follow-up question, it is inviting you to go deeper, not penalizing you for what you wrote.</p>
+    <p>You can retry any question as many times as you need. Each retry should add something new — not just restate what you already wrote.</p>
+    <p>There is no time limit. Your instructor has posted a submission due date on Canvas. If you need to stop before finishing, click <strong>"Submit what I have"</strong> in the top bar at any time — you will get credit for everything you have demonstrated so far. You can also submit again later if you want to improve your grade, as long as your instructor accepts multiple submissions.</p>
+  </div>
+
+  <div class="info-box">
+    <span class="info-box-label">Grade thresholds</span>
+    <table class="grade-table" aria-label="Grade requirements">
+      <thead><tr><th scope="col">Grade</th><th scope="col">What you need to demonstrate</th></tr></thead>
+      <tbody>
+        <tr><td><strong>C</strong></td><td>Recognition demonstrated in all 6 domains</td></tr>
+        <tr><td><strong>B</strong></td><td>Recognition in all 6 + Application in at least 4</td></tr>
+        <tr><td><strong>A</strong></td><td>Recognition in all 6 + Application in all 6 + Integration in at least 3</td></tr>
+      </tbody>
+    </table>
+    <p>You can see your grade progress at any time in the progress map shown during the exam.</p>
+  </div>
+
+  <div class="info-box">
+    <span class="info-box-label">How to submit</span>
+    <p>When you finish, the app will generate a <strong>Submission Token</strong> — a secure code that contains your complete exam record. Copy this token and paste it into your Canvas submission text box. Also print or save your Competency Report as a PDF and attach it. Your instructor uses the token to verify your submission.</p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <!-- Resume banner — shown if saved progress exists -->
+  <div id="resumeBanner" style="display:none;background:var(--amber-l);
+    border:1px solid rgba(138,60,12,.3);border-radius:.5rem;
+    padding:1rem 1.2rem;margin-bottom:1.2rem;max-width:640px;">
+    <p style="font-family:var(--sans);font-size:.85rem;font-weight:700;
+      color:var(--amber);margin-bottom:.4rem;">
+      You have a saved exam session
+    </p>
+    <p id="resumeDesc" style="font-size:1rem;color:var(--ink2);margin-bottom:.75rem;line-height:1.7;"></p>
+    <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="doResume()"
+        style="background:var(--amber);border-color:var(--amber);">
+        Resume where I left off
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="doFresh()"
+        style="color:var(--muted);border-color:var(--muted);font-size:.8rem;">
+        Start fresh (clears saved progress)
+      </button>
+    </div>
+  </div>
+
+  <label for="student-name">Your full name (as it appears on Canvas)</label>
+  <input type="text" id="student-name" autocomplete="name"
+    placeholder="First Last" maxlength="80"
+    aria-describedby="name-hint">
+  <p id="name-hint" style="font-size:.95rem;color:var(--muted);margin-top:.4rem">
+    This will appear on your Competency Report.
+  </p>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="startExam()">Begin the Exam &rarr;</button>
+  </div>
+</div></div>
 </div>
 
-<!-- PREDICTION CHAIN -->
-<div class="chain-bar">
-  <h3>Prediction Chain &mdash; Journal Q5 flows chapter to chapter</h3>
-  <div class="chain-row">
-    <span class="chain-node">Orientation → orient_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch2 → ch2_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch3 → ch3_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch4 → ch4_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch5 → ch5_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch6 → ch6_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch7 → ch7_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Ch8 → ch8_cq5</span>
-    <span class="chain-arrow">→</span>
-    <span class="chain-node">Rust Belt → rust_belt_cq5</span>
+<!-- ═══ QUESTION SCREEN ══════════════════════════════════════════════════ -->
+<div id="screen-question" class="screen">
+<header class="top-bar" role="banner">
+  <span class="top-bar-title" id="topbar-domain">EBB Final Exam</span>
+  <span class="top-bar-grade" aria-live="polite" aria-atomic="true" id="topbar-grade">Grade: —</span>
+  <button class="btn btn-ghost btn-sm" onclick="confirmEarlySubmit()"
+    style="font-size:.8rem;padding:.35rem .9rem;border-color:var(--muted);color:var(--muted);"
+    title="Stop here and submit your current grade">
+    Submit what I have
+  </button>
+</header>
+<div class="shell q-screen">
+  <nav aria-label="Exam progress by domain">
+    <div class="progress-map" id="progressMap" role="list"></div>
+  </nav>
+  <hr class="divider">
+  <div class="domain-header">
+    <span class="domain-badge" id="domainBadge"></span>
+    <h2 class="domain-title" id="domainTitle"></h2>
+    <p class="domain-sub" id="domainSub"></p>
+  </div>
+  <span class="level-badge" id="levelBadge" tabindex="-1" aria-live="polite"></span>
+  <div class="question-text" id="questionText" role="region" aria-label="Question"></div>
+  <!-- Guidance box — JS toggle, no details/summary dependency -->
+  <div id="guidanceBox" style="background:rgba(13,94,87,.06);border:1px solid rgba(13,94,87,.2);border-radius:.5rem;margin-bottom:1.25rem;overflow:hidden;">
+    <button id="guidanceToggle" onclick="toggleGuidance()" aria-expanded="false" aria-controls="guidanceContent"
+      style="width:100%;text-align:left;background:none;border:none;
+             padding:.75rem 1.1rem;cursor:pointer;
+             font-family:var(--sans);font-size:.88rem;font-weight:700;
+             color:var(--teal);display:flex;align-items:center;gap:.5rem;">
+      <span id="guidanceArrow" style="font-size:.75rem;transition:transform .2s;display:inline-block;">&#9654;</span>
+      What the Companion looks for in a complete response
+    </button>
+    <div id="guidanceContent" style="display:none;padding:0 1.1rem 1rem 1.1rem;">
+      <p id="guidanceText" style="font-size:1rem;color:var(--ink2);line-height:1.75;margin:0;"></p>
+    </div>
+  </div>
+  <div class="prev-wrap" id="prevWrap" style="display:none">
+    <p class="prev-label">Your previous response:</p>
+    <div class="prev-text" id="prevText"></div>
+  </div>
+  <div>
+    <label for="responseArea">Your response</label>
+    <p id="responseHint" style="font-size:.95rem;color:var(--muted);margin-bottom:.6rem">
+      Write as much as you need. Specific answers demonstrate more than general ones.
+    </p>
+    <textarea id="responseArea" aria-describedby="responseHint charCount"
+      maxlength="3000" onkeyup="updateCC()"></textarea>
+    <p class="char-count" id="charCount" aria-live="polite">0 / 3000 characters</p>
+  </div>
+  <section class="companion-region" id="companionRegion"
+    role="region" aria-label="Companion feedback" aria-live="polite" aria-atomic="true">
+    <div class="companion-header">Companion Response</div>
+    <span class="companion-verdict" id="companionVerdict"></span>
+    <p class="companion-text" id="companionText"></p>
+  </section>
+  <div class="btn-row" role="group" aria-label="Question actions">
+    <button class="btn btn-ghost" id="askBtn" onclick="submitResponse()">
+      Submit to Companion &rarr;
+    </button>
+    <button class="btn btn-primary" id="nextBtn" onclick="advance()" style="display:none">
+      Next Question &rarr;
+    </button>
+    <button class="btn btn-ghost btn-sm" id="retryBtn" onclick="retry()" style="display:none">
+      Retry this question
+    </button>
+    <button class="btn btn-ghost btn-sm" id="skipBtn" onclick="skipDomain()"
+      style="color:var(--muted);border-color:var(--muted);font-size:.8rem;"
+      title="Leave this section and move to the next domain">
+      Skip this section &rarr;
+    </button>
   </div>
 </div>
+</div>
 
-<!-- ORIENTATION -->
-<div class="chapter-group ch-orient">
-  <div class="group-label">Orientation</div>
-  <div class="app-grid">
-    <a class="app-card" href="ebb-orientation-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🗺️</div><div><div class="app-card-title">Course Orientation</div><div class="app-card-type">Interactive Map</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The watershed model, PRF Peak Calculator, course arc, and Journal Q4 prediction for Chapter 2. Start here before Chapter 1.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-orientation">Orientation</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="day1-orientation.html">
-      <div class="app-card-head"><div class="app-card-icon">📋</div><div><div class="app-card-title">Day 1 Orientation</div><div class="app-card-type">First Class</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">First-day introduction to the course framework, PRF concept, and OS1/OS2 distinction.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-orientation">Day 1</span><span class="app-card-arrow">→</span></div>
-    </a>
+<!-- ═══ COMPLETION ════════════════════════════════════════════════════════ -->
+<div id="screen-completion" class="screen">
+<div class="shell completion-wrap">
+  <h2 style="font-family:var(--serif);font-size:2.2rem;color:var(--ink);margin-bottom:.5rem">
+    Your Competency Report
+  </h2>
+  <p style="font-size:1.1rem;color:var(--muted);margin-bottom:2rem">
+    Below is a complete record of your exam session. Follow the submission instructions at the bottom.
+  </p>
+  <div class="grade-reveal" role="region" aria-label="Final grade">
+    <div class="grade-letter" id="finalGradeLetter">—</div>
+    <div class="grade-label" id="finalGradeLabel">Computing your grade...</div>
   </div>
-</div>
-
-<!-- CHAPTER 1 -->
-<div class="chapter-group ch-1">
-  <div class="group-label">Chapter 1 &mdash; The PRF</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter1-lens-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🔭</div><div><div class="app-card-title">Your Interpretive Lens</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Build your Phenomenological Reference Framework. How your PRF formed, what it makes visible, and what it makes hard to see.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
+  <div class="competency-report" id="competencyReport"
+    role="region" aria-label="Competency report by domain"></div>
+  <hr class="divider">
+  <h3 style="font-family:var(--sans);font-size:1.1rem;font-weight:700;color:var(--ink);margin-bottom:.75rem">
+    Submission Instructions
+  </h3>
+  <div class="token-instructions" role="note">
+    <strong>Step 1:</strong> Print this page or save it as a PDF (Ctrl+P / Cmd+P). Attach the PDF to your Canvas submission.<br><br>
+    <strong>Step 2:</strong> Copy the entire Submission Token below and paste it into the Canvas submission text box. Do not modify the token — it verifies your submission automatically.
   </div>
-</div>
-
-<!-- CHAPTER 2 -->
-<div class="chapter-group ch-2">
-  <div class="group-label">Chapter 2 &mdash; The Challenger Disaster</div>
-  <div class="app-grid">
-    <a class="app-card" href="challenger-case-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">🚀</div><div><div class="app-card-title">Challenger Case Explorer</div><div class="app-card-type">Case Explorer + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Roger Boisjoly and the suppression gap. Eight tabs: Discovery through Aftermath. UCP Simulation: Config A (Thiokol) vs. Config B (protected channel). Clickable metric explanations.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Explorer</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="chapter2-telescope-app.html">
-      <div class="app-card-head"><div class="app-card-icon">📡</div><div><div class="app-card-title">Chapter 2 Companion</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The suppression gap concept, institutional architecture, and the ethics of speaking truth to power.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
+  <p style="font-family:var(--sans);font-size:.9rem;font-weight:700;color:var(--ink2);margin-bottom:.5rem">
+    Submission Token (copy all of this):
+  </p>
+  <div class="token-box" id="tokenBox" role="textbox" aria-readonly="true"
+    aria-label="Submission token — copy this entire text" tabindex="0">Generating...</div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="copyToken()">Copy Token to Clipboard</button>
+    <button class="btn btn-ghost" onclick="window.print()">Print / Save PDF</button>
   </div>
+  <p style="font-size:.95rem;color:var(--muted);margin-top:1.5rem;font-style:italic">
+    Submitted: <span id="submissionTime"></span><br>
+    Student: <span id="submissionName"></span>
+  </p>
+</div>
 </div>
 
-<!-- CHAPTER 3 -->
-<div class="chapter-group ch-3">
-  <div class="group-label">Chapter 3 &mdash; Father Hanna</div>
-  <div class="app-grid">
-    <a class="app-card" href="hanna-case-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">⛪</div><div><div class="app-card-title">Hanna Case Explorer</div><div class="app-card-type">Case Explorer + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Father Saad Sirop Hanna — maintaining identity under maximum institutional entropy. Identity Kernel, BioBond, and the limits of individual courage.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Explorer</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="chapter3-commonwealth-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🏛️</div><div><div class="app-card-title">Chapter 3 Companion</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Building commonwealth across difference. The conditions for ethical functioning under extreme constraint.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
+</main>
+<script>
+// Guidance text shown to students before they write — must match what Companion assesses
+const GUIDANCE = {
+  recognition:{
+    1:"Name the concept and explain it in your own words. You don't need to use the exact technical term — what matters is showing you understand what it is and why it exists. A complete response includes: what the concept is, what it is made of or where it comes from, and why it matters for how people see the same situation differently.",
+    2:"Name at least one of the two coordination systems EBB describes and explain what makes it work or fail. A complete response includes: what the system requires from the people using it, when it works well, and when it breaks down.",
+    3:"Name the concept and explain what makes it different from simply a 'bad institution' or a 'failing organization.' A complete response includes: what is happening on the surface (visible functioning) and what is happening underneath (internal depletion), and why the gap between these two is what makes it dark rather than just bad.",
+    4:"Name the concept and explain it as a biological or structural reality, not a character failing. A complete response includes: what happens to a person's thinking when this occurs, what kinds of situations produce it, and why it is not the person's fault.",
+    5:"Name at least three of the four ethical frameworks and describe what each one cares about most. A complete response includes a specific example of how each framework would approach the same situation differently.",
+    6:"Name the concept and explain what makes something a constructor rather than just a good effort or a well-intentioned program. A complete response includes: what a constructor reliably produces, and what a real example (Green Belt Movement or Bridges of America) shows about how one works."
+  },
+  application:{
+    1:"Apply the PRF concept to the specific case described. A complete response identifies what each person's dominant moral foundation likely is, explains why their different foundations lead them to see the situation differently, and names what kind of coordination failure is happening.",
+    2:"Apply the OS1/OS2 distinction to the specific case described. A complete response identifies what kind of coordination failure is occurring, explains why more arguments are unlikely to help, and proposes a specific shared task that both sides could endorse for their own reasons.",
+    3:"Apply the structural framework to the specific institutional case described. A complete response identifies the type of intervention being proposed, explains why it is or is not likely to raise the institution's recovery ceiling, and names what type of change would actually be required.",
+    4:"Apply the EBB framework to the specific scenario described. A complete response distinguishes between a structural explanation and a character explanation for what happened, and states which explanation EBB supports and why.",
+    5:"Apply the SAGE method to the specific situation described. A complete response works through each step, identifies where the different ethical frameworks diverge, and explains what the EBB structural analysis adds that framework analysis alone does not.",
+    6:"Apply the basin and transition concepts to a specific real example. A complete response identifies whether the example is a within-basin effort or a Basin Transition attempt, and explains what would actually be required for a genuine Basin Transition."
+  },
+  integration:{
+    1:"Apply the concept to a real, specific relationship or institution in your own life. A complete response names specific people or situations, gives concrete examples of the concept appearing in your experience, and reflects honestly on what understanding the framework has changed for you.",
+    2:"Describe a real situation from your own life where OS1 or OS2 coordination was at stake. A complete response is specific (a real moment, not a general description), honest about what actually happened, and connects the structural concept to your specific experience.",
+    3:"Apply the diagnostic to a real institution you know from the inside. A complete response provides specific evidence for both the visible functioning and the internal depletion, names which structural parameter is the primary driver, and explains what a structural repair would require.",
+    4:"Describe a specific real situation from your own life where your gate closed or your agency was extracted or your capacity to think clearly was compressed. A complete response is specific and honest, distinguishes between structural conditions and personal factors, and names what structural condition would have made a difference.",
+    5:"Apply multiple ethical frameworks to a real ethical conflict from your own life. A complete response is honest (a real conflict, not a comfortable one), shows where the frameworks agree and disagree, and connects your natural framework preference to your PRF.",
+    6:"Make a specific, honest commitment about something you intend to build, protect, or maintain in your institutional life. A complete response names the specific thing, who it serves, and what structural conditions you need to maintain to make it reliable rather than occasional."
+  }
+};
 
-<!-- CHAPTER 4 -->
-<div class="chapter-group ch-4">
-  <div class="group-label">Chapter 4 &mdash; Wangari Maathai</div>
-  <div class="app-grid">
-    <a class="app-card" href="maathai-case-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">🌳</div><div><div class="app-card-title">Maathai Case Explorer</div><div class="app-card-type">Case Explorer + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Wangari Maathai and the Green Belt Movement. Coordination architecture, OS2 Bridge, and building institutions that outlast their founders.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Explorer</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="chapter4-maathai-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🌿</div><div><div class="app-card-title">Chapter 4 Companion</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Institutional design, capability-based coordination, and the ethics of building structures that distribute agency.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
 
-<!-- CHAPTER 5 -->
-<div class="chapter-group ch-5">
-  <div class="group-label">Chapter 5 &mdash; Nelson Mandela</div>
-  <div class="app-grid">
-    <a class="app-card" href="mandela-case-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">⚖️</div><div><div class="app-card-title">Mandela Case Explorer</div><div class="app-card-type">Case Explorer + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Nelson Mandela and the TRC. Three simulation runs: the TRC design, the fragmentation counterfactual, and the vulnerable population test.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Explorer</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="chapter5-mandela-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🕊️</div><div><div class="app-card-title">Chapter 5 Companion</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Truth, reconciliation, and institutional design across radical difference. The TRC as a coordination architecture problem.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
+const DOMAINS=[
+{id:1,name:"Who You Are and How You See",
+ badge:"Domain 1 of 6",
+ sub:"PRF, Moral Foundations, and the Assembly History — Chapters 1–2",
+ questions:{
+  recognition:[
+   "You grew up in a family where being loyal to your group — your family, your neighborhood, your people — was considered one of the most important values a person could have. Your classmate grew up in a family where fairness to everyone, even strangers, was what mattered most. When your class discusses a political issue, you find yourself seeing it completely differently than your classmate does, even though you both think you are being reasonable.\n\nWhat does EBB call the interpretive lens that each of you is seeing through — the one shaped by your upbringing and experience? Describe in your own words what that lens is made of and why two people can look at the same situation and see genuinely different moral priorities.",
+   "EBB talks about five moral foundations that researchers have found in every human culture, though different people weight them differently. Name at least three of these foundations. Then give a real, specific example of how someone who weighted one of them very highly might see a workplace situation differently than someone who weighted it lowly.",
+   "Your Assembly History Detective assignment asked you to trace where your values came from. What does EBB mean by the 'assembly history' of a person's moral framework? Why does understanding your own assembly history matter for how you engage with people who see things very differently from you?"
+  ],
+  application:[
+   "A hospital is deciding whether to cut overnight nursing staff by 20% to reduce costs. A nurse who has worked the night shift for fifteen years says this is dangerous and will harm patients. The hospital administrator says the data shows no significant increase in adverse events at hospitals with similar staffing ratios. Both people are looking at the same situation. Both believe they are being reasonable.\n\nIdentify what each person's primary moral foundation likely is. Explain why their foundations lead them to see this situation differently. Then describe what OS1 coordination failure looks like in this conversation.",
+   "Your Applied Ethics project put you in a group with students who saw a moral situation differently than you did. Choose one specific moment of genuine disagreement from that project. Identify what you think the PRF difference was. Explain what made it feel like an OS1 failure. What would an OS2 reframe of that disagreement have looked like?",
+   "EBB argues that your PRF is not something you chose — it was assembled by forces outside your control. Explain why understanding your PRF as assembled rather than simply chosen might make you more effective when working with people who see things very differently — not less effective."
+  ],
+  integration:[
+   "Describe a specific real relationship in your life — a family member, a coworker, a classmate — where you and that person consistently see moral situations differently. Identify what you think the PRF difference is between you. Give two specific examples of situations where this difference showed up. How has understanding the PRF framework changed how you think about this relationship?",
+   "Your Assembly History Detective assignment asked you to trace where your values came from. Describe one specific value or moral commitment you carry that you can now trace to a specific experience, relationship, or cultural context in your history. How does knowing where it came from change — or not change — how committed you are to it?",
+   "Think about the institution you know best from the inside — a workplace, a school, a family system. What PRF orientations are most rewarded there? What PRF orientations are penalized or ignored? How does this affect people whose PRF does not align with what the institution rewards?"
+  ]
+ }
+},
+{id:2,name:"Two Ways of Coordinating",
+ badge:"Domain 2 of 6",
+ sub:"OS1, OS2, and Working Across Difference — Chapters 2–3",
+ questions:{
+  recognition:[
+   "EBB describes two operating systems for how people coordinate with each other. In your own words — without using the terms OS1 and OS2 — describe the difference between these two systems. What does each one require from the people using it? When does each one work well, and when does each one fail?",
+   "EBB uses the example of Wangari Maathai and the Green Belt Movement to illustrate a key concept. Briefly describe what Maathai did and why EBB treats it as an example of something more than just good leadership. What specific structural feature of what she built does EBB point to?",
+   "EBB uses the phrase 'the stag grows with N' to describe something about OS2 coordination. In plain English, what does this mean? Give an example of a task that becomes possible when diverse people cooperate that would not be possible for a group of people who all see things the same way."
+  ],
+  application:[
+   "A neighborhood association is trying to decide whether to turn a vacant lot into a community garden or a small parking area. The argument has been going on for months with no resolution. One group says the garden would improve mental health and community connection. Another says the parking is needed for elderly residents who cannot walk far.\n\nIdentify what kind of coordination failure this is and why more arguments are unlikely to solve it. Then describe what an OS2 approach would look like — what shared task could both groups endorse for their own reasons?",
+   "Your Applied Ethics project required you to work across PRF difference. Identify one moment where the group was stuck — where better arguments were not solving the problem. Describe specifically what the PRF difference was. Then describe what actually happened — did the group find an OS2 pathway, stay stuck, or did one side simply give in?",
+   "EBB argues that the most important problems of our time cannot be solved by any single group of people who all share the same values. Explain why, using the OS1/OS2 distinction. Then identify one specific large-scale problem in your community or in Florida that requires OS2 coordination to solve. What structural conditions would make that coordination possible?"
+  ],
+  integration:[
+   "Describe a real situation in your own life where you successfully coordinated with someone who had genuinely different values — where you built or did something together that neither of you could have done alone. What made it work? Identify the shared task, describe how it served different values simultaneously, and explain what conditions made the cooperation sustainable.",
+   "Describe a situation where OS1 coordination failed — where you and someone else had a genuine disagreement that better arguments could not resolve. Be honest about what actually happened: did one of you give in, did you separate, or did you find a genuine alternative? If you found an alternative, describe it. If you did not, describe what one would have looked like.",
+   "Think about your workplace, family, or community. Identify one shared task that people with genuinely different values could all endorse for their own reasons — something that does not require agreement on why it matters. Describe who the participants would be, what moral orientations they bring, why the task serves each, and what structural conditions would make cooperation reliable."
+  ]
+ }
+},
+{id:3,name:"When Institutions Consume the People Inside Them",
+ badge:"Domain 3 of 6",
+ sub:"Dark Coherence, the Structural Ceiling, and Institutional Parasitism — Chapters 3–4",
+ questions:{
+  recognition:[
+   "EBB describes something called dark coherence. In plain language, what does this mean? What makes it 'dark' rather than just 'bad' or 'failing'? Give an example of an institution that might look fine from the outside — passing inspections, meeting its targets, fulfilling its contracts — while something essential inside it is being consumed.",
+   "EBB talks about something called the structural ceiling. Imagine you are an excellent nurse, genuinely committed to your patients, working harder than the job requires. Explain why your effort, skill, and commitment might still not produce the patient outcomes you are trying to produce — not because of anything you are doing wrong, but because of the structural ceiling. What is the ceiling made of?",
+   "EBB identifies five specific structural parameters that determine how high an institution's ceiling is — how much of its stated mission it can actually achieve regardless of how hard its people work. Name as many of these five as you can and give a plain English explanation of what each one measures. You do not need to use technical terms — functional descriptions count."
+  ],
+  application:[
+   "A private company runs a chain of nursing homes in Florida. The company has investors who receive a return each quarter. The facilities consistently pass state inspections. Staff turnover is 58% per year. Resident complaints have increased for three consecutive years. The company's response is to implement a new training program and add a staff recognition award.\n\nUsing the EBB framework, explain why the training and recognition award are unlikely to produce lasting improvement. What type of intervention does EBB say is actually required?",
+   "Compare two correctional facilities in Florida: one run by a private company with investors who receive profit distributions, and one run by a nonprofit organization whose founder was formerly incarcerated. Using EBB's concepts of extraction rate and structural ceiling, explain why these two institutions would be expected to produce different rehabilitation outcomes even if their staff worked equally hard and their programs were equally well-designed.",
+   "Think about a job you have had or currently have. Identify one moment where you ran into what EBB calls the structural ceiling — where you were trying to do your job well and something above and prior to you prevented you from doing it. Describe specifically what the ceiling was made of in that situation. What would have needed to change at the structural level — not the individual level — for the ceiling to be higher?"
+  ],
+  integration:[
+   "Describe an institution you know from the inside that you believe is darkly coherent — one that looks fine from the outside while something essential is being consumed inside it. Provide specific evidence: what makes it look coherent from the outside, and what evidence do you have that internal capacity is declining? Which structural parameter is the primary driver? What would a valid structural repair look like?",
+   "EBB argues that the most dangerous institutional failure is dark coherence — because visible failure triggers reform while dark coherence persists precisely because it does not trigger alarm. Describe a specific moment in your own experience when you were inside a darkly coherent institution and did not fully understand what was happening until later. What were the signs you missed?",
+   "Think about one specific thing in your institutional life that you have been told is a personal failure — something you are not doing well enough, not trying hard enough — that you now believe might actually be a structural ceiling problem. Describe the situation. Explain the difference between the personal failure interpretation and the structural ceiling interpretation. What evidence supports the structural interpretation?"
+  ]
+ }
+},
+{id:4,name:"Your Agency and How to Protect It",
+ badge:"Domain 4 of 6",
+ sub:"The Sapolsky Gate, Recovery, and The Examined App — Chapters 4–5",
+ questions:{
+  recognition:[
+   "EBB describes something called the Sapolsky Gate. Without using technical language, describe what this is in plain English. What happens to a person's ability to think through a complex moral situation when the gate closes? Give an example of a common situation — at work, at home, in school — where the gate might close. Is a closed gate a character failure? Why or why not?",
+   "EBB talks about something called morphic suppression — a kind of learning that institutions teach their members without ever saying it out loud. In plain language, describe what morphic suppression is and how it develops. What specific kinds of experiences teach it? Give an example of a workplace or school situation where a person might develop it without ever being told to.",
+   "EBB's Examined App has a daily practice called ABCD reflection. What do these four letters stand for in EBB, and why does the course treat this as infrastructure rather than journaling? What is the difference between reflecting on your day as a personal diary and reflecting on it as a structural practice for maintaining your capacity to act from your values?"
+  ],
+  application:[
+   "A correctional officer has worked at a private prison for four years. When they started, they filed detailed incident reports, advocated for inmates who needed mental health referrals, and raised concerns in staff meetings about understaffing. They have stopped doing all three. Their supervisor would describe them as a good officer — efficient, reliable, no trouble.\n\nUsing EBB concepts, explain what has happened to this officer. Distinguish between the explanation that treats this as a character change and the explanation that treats this as a structural outcome. Which does EBB support and why?",
+   "EBB's coherence check-in tracks six domains of your experience. You check in and notice your Physical Energy score is 2, your Temporal Horizon score is 2, and your Recovery Access score is 1. Your Identity Integrity score is 4. Using EBB's framework, what does this pattern suggest? What does The Examined App's guidance say about what to do when Recovery Access is this low? Why does the app prioritize recovery before challenge?",
+   "Stanislav Petrov kept the Sapolsky Gate open under conditions specifically designed to close it — extreme time pressure, institutional demand for automatic response, and consequences he could not fully calculate. EBB argues this was not heroism but structural capacity. What structural conditions — however minimal — allowed him to hold the gate open? What does this have to do with how you use The Examined App?"
+  ],
+  integration:[
+   "Describe a specific situation in your own life where you believe your Sapolsky Gate closed — where institutional pressure, time compression, or overwhelming stress narrowed your thinking below what you knew was adequate for the situation. What did it feel like from the inside? What did you do that you later wished you had thought through more carefully? What structural conditions contributed to the gate closing, and what conditions might have kept it open?",
+   "Look back at your Examined App check-in history from this semester. Identify a period where your scores show a pattern — a decline across multiple domains or a sustained low score in one domain. Describe what was happening in your institutional life during that period. What does the pattern tell you about the relationship between your external conditions and your internal coherence?",
+   "EBB argues that The Examined App, the ABCD practice, the Letter to Future Self, and the coherence check-in are not add-ons — they are the course's core infrastructure for what it is actually trying to build. Describe specifically how you have used one of these tools this semester in a way that went beyond journaling — where it functioned as structural support for your capacity to act from your values under pressure. If you have not used them this way, explain honestly why not."
+  ]
+ }
+},
+{id:5,name:"Ethical Frameworks and How to Use Them",
+ badge:"Domain 5 of 6",
+ sub:"SAGE, the Major Traditions, and Applying Ethics to Real Situations — Chapters 1–3",
+ questions:{
+  recognition:[
+   "EBB introduces several ethical frameworks — ways of thinking about what makes actions right or wrong. Describe in plain English what each of the following frameworks cares about most: (1) consequentialism, (2) deontology, (3) virtue ethics, (4) care ethics. Give a specific example of how each framework would approach the same situation differently — for example, a nurse asked to work a double shift they believe will compromise patient safety.",
+   "EBB uses a structured analysis method called SAGE. Without looking it up, describe what the letters stand for and what each step is supposed to do. Why does EBB use a structured method rather than just asking students to reason carefully? What does structure add that careful thinking alone does not?",
+   "EBB argues that the major ethical frameworks all implicitly require what the course calls the Agency Coherence Principle. In plain language, what is the Agency Coherence Principle? Give one example of how a consequentialist, a deontologist, and a care ethicist would each be committed to it for their own internal reasons."
+  ],
+  application:[
+   "Apply the SAGE framework to this situation: A social worker knows that a client needs a specific housing placement to maintain their sobriety and avoid returning to a dangerous living situation. The placement is available but requires approval from a supervisor who has consistently denied similar requests on budget grounds. The social worker is considering submitting the request under a slightly different category that would bypass the supervisor's review.\n\nWalk through each step of SAGE for this situation. At which step do the different ethical frameworks diverge? What does EBB add to the analysis?",
+   "EBB argues that different ethical frameworks are not competitors where one must be right — they are different lenses that illuminate different dimensions of a moral situation. For a specific moral situation from your Applied Ethics project, show how at least three different ethical frameworks each revealed something true that the others underemphasized.",
+   "EBB argues that each major ethical framework captures something essential about moral life — and that each also has a blind spot. For two frameworks of your choice, name one situation where it gives the most useful guidance and one situation where it is most likely to mislead. Use specific examples from the course material or from your own experience."
+  ],
+  integration:[
+   "Describe a genuine ethical conflict you have faced or are currently facing in your own life — not a hypothetical. Apply at least two ethical frameworks to it and show where they agree and where they diverge. Identify which framework feels most natural to you and connect this to your PRF. Then describe what the EBB structural analysis adds — what does considering the institutional conditions that created this conflict reveal that the framework analysis alone does not?",
+   "EBB argues that the Agency Coherence Principle is not just a philosophical claim — it is a description of what living systems already do when functioning correctly. Connect this claim to your own experience: describe a relationship, community, or institution in your life that does meet the ACP — where the conditions for genuine agency are preserved and extended. What specific structural features make this possible?",
+   "At the beginning of this course, how did you think about ethics? How has your understanding changed over the semester? Be specific: identify one concept from EBB that genuinely changed something about how you see a situation you encounter regularly. What is different in how you see it now, and what is the same?"
+  ]
+ }
+},
+{id:6,name:"The Bigger Picture",
+ badge:"Domain 6 of 6",
+ sub:"Constructors, the AMC, and What You Are Building — Interlude and Capstone",
+ questions:{
+  recognition:[
+   "EBB uses the concept of a constructor — borrowed from physics — to describe something more than just an organization or a program. In plain language, what is a constructor, and what makes something a constructor rather than just a good effort or a well-intentioned project? Use the Green Belt Movement or Bridges of America as an example of a real constructor.",
+   "EBB describes the Adaptive Moral Commonwealth as a direction rather than a destination. In plain English, what does this mean? What would a society moving toward the AMC look like compared to one moving away from it? What specific structural features mark the difference — not just values or intentions, but actual institutional architecture?",
+   "EBB ends with the stories of Stanislav Petrov and Vasili Arkhipov. Why does EBB treat these Cold War stories as relevant to a community college ethics course? What do two Soviet military officers from 1983 have to do with a student working in healthcare or retail or childcare in St. Petersburg, Florida in 2026?"
+  ],
+  application:[
+   "EBB argues that reform efforts that operate within an existing institutional basin cannot produce Basin Transition — the kind of structural change that raises the ceiling rather than just improving performance within it. Give a specific example of a reform effort you know about — from news, your own experience, or the course — that you believe was a within-basin effort. What would Basin Transition have required in that case?",
+   "EBB identifies several ways that institutional change attempts commonly fail. Without needing to remember the formal names, describe at least three types of failure and give a real or plausible example of each. For each failure type, explain what a valid intervention would require that the failed attempt did not provide.",
+   "Wangari Maathai did not try to reform the colonial land system in Kenya from within. She built something outside it that offered a different basin to the people the old system was consuming. Using this as a model, identify a consuming institution in Florida or your community and describe what a Maathai-style response would look like — not reform from within, but the construction of a viable alternative."
+  ],
+  integration:[
+   "EBB argues that every person who maintains their capacity for genuine agency inside a consuming institution — who holds the question open rather than acting as a pure relay for the system's demands — is contributing to the Adaptive Moral Commonwealth, even if no one recognizes it and even if the contribution is small. Describe one specific thing you do, or have done, that fits this description. What structural conditions make it possible?",
+   "EBB's Letter to Future Self assignment asked you to write to the version of yourself who will be in an institution in five years. What did you tell that future self? Looking back on what you wrote, what does it reveal about what you have actually taken from this course — not what you were supposed to take, but what actually changed in how you see your own institutional life?",
+   "This is the final question of the course. EBB has argued that the ethical task of the Adaptive Moral Commonwealth is simple but profound: to leave behind a future in which others can continue to become themselves. What specific thing do you intend to build, maintain, protect, or preserve — in your workplace, your family, your community, or your field — that contributes to that project? Be specific about what it is, who it serves, and what structural conditions you will need to maintain to make it reliable rather than occasional."
+  ]
+ }
+}
+];
 
-<!-- CHAPTER 6 -->
-<div class="chapter-group ch-6">
-  <div class="group-label">Chapter 6 &mdash; Tim Palmer</div>
-  <div class="app-grid">
-    <a class="app-card" href="palmer-case-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">🌀</div><div><div class="app-card-title">Palmer Case Explorer</div><div class="app-card-type">Case Explorer + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Tim Palmer and ensemble forecasting. Single-model vs. ensemble architecture. The moral argument for honest uncertainty. Three simulation runs.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Explorer</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="chapter6-companion.html">
-      <div class="app-card-head"><div class="app-card-icon">📊</div><div><div class="app-card-title">Chapter 6 Companion</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The primacy of doubt. Chaos, uncertainty, and the ethics of what forecasting institutions owe the people who depend on them.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
+const LEVELS=['recognition','application','integration'];
+const LV_LABEL={recognition:'Recognition',application:'Application',integration:'Integration'};
+const LV_CLASS={recognition:'lv-r',application:'lv-a',integration:'lv-i'};
+const ENDPOINT='https://ucp-backend-4dig.onrender.com/api/claude-proxy';
 
-<!-- CHAPTER 7 -->
-<div class="chapter-group ch-7">
-  <div class="group-label">Chapter 7 &mdash; Doyne Farmer</div>
-  <div class="app-grid">
-    <a class="app-card" href="farmer-case-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">🏭</div><div><div class="app-card-title">Farmer Case Explorer</div><div class="app-card-type">Case Explorer + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Doyne Farmer and agent-based economics. Three runs: Representative Agent, Heterogeneous Agents, Rawlsian Test. The COVID prediction and what standard models missed.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Explorer</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="chapter7-farmer-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🔬</div><div><div class="app-card-title">Chapter 7 Companion</div><div class="app-card-type">Companion App</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The invisible people. Representative agent error, heterogeneous modeling, social block fields, and the Rawlsian test. Your field map exercise.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Companion</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
+// ── STATE ──────────────────────────────────────────────────────────────────────
+const S={
+  name:'', startTime:null,
+  di:0, li:0,
+  data:{}, // domainKey -> {response,verdict,attempts,feedback}
+  currentVerdict:null
+};
 
-<!-- CHAPTER 8 -->
-<div class="chapter-group ch-8">
-  <div class="group-label">Chapter 8 &mdash; The Simulated History of Ethics</div>
-  <div class="app-grid">
-    <a class="app-card" href="ethical-theories-app.html">
-      <div class="app-card-head"><div class="app-card-icon">🏛️</div><div><div class="app-card-title">Ethical Theories App</div><div class="app-card-type">Nine Stations + Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">What were the traditions actually measuring? Nine stations from Socrates to Existentialism. Conditions Cascade visualization. Composite Run with all nine conditions. The Complex PRF.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Simulation</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
+function dk(d,l){return 'd'+d+'_'+l}
 
-<!-- CHAPTER 9 -->
-<div class="chapter-group ch-9">
-  <div class="group-label">Chapter 9 &mdash; The World Values Map</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter9-wvm-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#127758;</div><div><div class="app-card-title">Where Are You Standing?</div><div class="app-card-type">Cultural PRF &middot; Cross-Cultural Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The World Values Map applied to the simulation. Two axes, five worldview categories, the thermodynamic logic of why values shift with conditions, IPS-WVM connection, and AMC forward pointer.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Simulation</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+// ── START ──────────────────────────────────────────────────────────────────────
+function startExam(){
+  const n=document.getElementById('student-name').value.trim();
+  if(!n){alert('Please enter your full name before starting.');document.getElementById('student-name').focus();return;}
+  S.name=n; S.startTime=new Date();
+  DOMAINS.forEach(d=>LEVELS.forEach(l=>{ S.data[dk(d.id,l)]={response:'',verdict:'',attempts:0,feedback:''}; }));
+  show('screen-question'); loadQ();
+}
 
-<!-- CHAPTER 10 -->
-<div class="chapter-group ch-10">
-  <div class="group-label">Chapter 10 &mdash; The Social Contract</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter10-social-contract-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#x2696;&#xFE0F;</div><div><div class="app-card-title">Who Gave Them the Right?</div><div class="app-card-type">Three Architectures &middot; IPS Profiles &middot; Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Hobbes, Locke, and Rousseau as institutional architectures mapped to IPS parameters. Characteristic failure mode per architecture. CPG five criteria as IPS requirements. The Hybrid Citizen framework.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Simulation</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 
-<!-- INTERLUDE -->
-<div class="chapter-group ch-interlude">
-  <div class="group-label">Interlude &mdash; Ethics of the Framework</div>
-  <div class="app-grid">
-    <a class="app-card" href="interlude-ethics-framework-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#9651;</div><div><div class="app-card-title">Ethics of the Framework</div><div class="app-card-type">Agency Conditions Principle &middot; Bridge Reading</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The normative core stated in full: ACP, entropy-exporting institutions, Coherence-Preserving Governance, temporal commons, and the six-question diagnostic for the applied sequence ahead.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-reference">Reading</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+// ── LOAD QUESTION ──────────────────────────────────────────────────────────────
+function loadQ(){
+  const dom=DOMAINS[S.di], lv=LEVELS[S.li];
+  const key=dk(dom.id,lv), rec=S.data[key];
+  const qs=dom.questions[lv];
 
-<!-- RUST BELT -->
-<div class="chapter-group ch-rustbelt">
-  <div class="group-label">Rust Belt Case Study &mdash; Nine Lenses Applied</div>
-  <div class="app-grid">
-    <a class="app-card" href="rust-belt-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#127981;</div><div><div class="app-card-title">Rust Belt &mdash; Nine Ethical Lenses</div><div class="app-card-type">Case Study + Three-Part Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The Rust Belt collapse examined through all nine ethical traditions simultaneously. Pre-collapse, collapse, and current state metrics. The synthesis tab shows what no single lens can see alone.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Study</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+  // Lock the question index on first load — never rotate during retries.
+  // Rotation across sessions is fine; rotation during a single attempt session breaks retries.
+  if(rec.questionIdx===undefined){
+    rec.questionIdx = (dom.id + S.li) % qs.length; // deterministic but varies by domain/level
+  }
+  const qi = rec.questionIdx;
 
-<div class="divider"></div>
+  g('domainBadge').textContent=dom.badge;
+  g('domainTitle').textContent=dom.name;
+  g('domainSub').textContent=dom.sub;
+  g('topbar-domain').textContent='Domain '+dom.id+' of 6 — '+LV_LABEL[lv];
 
-<!-- APPLIED SEQUENCE -->
-<div class="chapter-group ch-prologue">
-  <div class="group-label">Prologue &mdash; The Pattern Beneath Ethics</div>
-  <div class="app-grid">
-    <a class="app-card" href="prologue-pattern-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#127381;</div><div><div class="app-card-title">The Pattern Beneath Ethics</div><div class="app-card-type">Scale-Free Laws &middot; Agential Hijacking &middot; Course Map</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The scale-invariant mechanism underlying every chapter: parasitic overwrite operating identically at biological, psychological, institutional, and civilizational scales. The mantis case. Course architecture revealed.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-companion">Prologue</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+  const lb=g('levelBadge');
+  lb.textContent=LV_LABEL[lv]+' Level';
+  lb.className='level-badge '+LV_CLASS[lv];
 
-<div class="chapter-group ch-11">
-  <div class="group-label">Chapter 11 &mdash; Economic Systems (Applied Sequence &middot; Movement 1)</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter11-economic-systems-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#127970;</div><div><div class="app-card-title">What the Economy Does to Coherent Agency</div><div class="app-card-type">IPS Diagnostic &middot; BioBond &middot; Peterson et al. 2025</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The False Choice thesis. Nine fairness dimensions as IPS parameters. Florida nursing home ownership archetypes (Peterson/AARP 2025 &amp; CMS data). PE acquisition trajectory 2019&ndash;2024. BioBond instruments. True Solvency Accounting. Three economic architecture simulation configs.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Simulation + IPS</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+  g('questionText').textContent=qs[qi];
 
-<div class="chapter-group ch-12">
-  <div class="group-label">Chapter 12 &mdash; Governance Systems (Applied Sequence &middot; Movement 2)</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter12-governance-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#127981;</div><div><div class="app-card-title">Governance Systems and the Routing Quality Gap</div><div class="app-card-type">Four Configs &middot; Boisjoly T4 &middot; Type 1/Type 2 Failure</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Procedural vs. substantive legitimacy. Config A (Captured), B (Coherence-Preserving), C (Reform Transition), D (Boisjoly T4: agent FHRI 82, absorbed 67.7 pts). Type 1 vs. Type 2 routing quality failure distinction.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Simulation</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+  // Show guidance text matching this domain and level
+  const guidanceEl=g('guidanceText');
+  if(guidanceEl){
+    const txt=(GUIDANCE[lv]||{})[dom.id]||'';
+    guidanceEl.textContent=txt;
+    openGuidance();
+  }
+  g('responseArea').value=''; g('charCount').textContent='0 / 3000 characters';
 
-<div class="chapter-group ch-13">
-  <div class="group-label">Chapter 13 &mdash; Information Systems (Applied Sequence &middot; Movement 3)</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter13-infosystems-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#128225;</div><div><div class="app-card-title">Information Systems and the Second Filter</div><div class="app-card-type">Web of Acquisition &middot; &sigma;/&mu; Filter Asymmetry &middot; AI Ethics</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The filter upstream of governance. CSER Cambridge web of acquisition framework. IPS mechanism of filter asymmetry: &sigma; (morphic residue) and &mu; (incentive misalignment). Why 80% structural improvement is the honest result. Three simulation configs with IPS profiles.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Simulation</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+  const pw=g('prevWrap');
+  if(rec.response&&rec.attempts>0){pw.style.display='block';g('prevText').textContent=rec.response;}
+  else{pw.style.display='none';}
 
-<div class="chapter-group ch-14">
-  <div class="group-label">Chapter 14 &mdash; Existential Risk (Applied Sequence &middot; Movement 4)</div>
-  <div class="app-grid">
-    <a class="app-card" href="chapter14-existential-risk-app.html">
-      <div class="app-card-head"><div class="app-card-icon">&#127759;</div><div><div class="app-card-title">Existential Risk, Leverage, and the AMC</div><div class="app-card-type">IPS Field Profiles &middot; Iron Cage &middot; T1/T2 Counterfactuals</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Meadows leverage hierarchy. Iron Cage (high-&sigma;/&rho;) and Obsolescence Trap (high-&epsilon;/&mu;) failure modes. Four-institution IPS field profiles. Trust vector trajectory. T1 vs. T2 intervention types. Paris Agreement analysis. AMC as field architecture.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Multi-Institutional Field</span><span class="app-card-arrow">&#8594;</span></div>
-    </a>
-  </div>
-</div>
+  g('companionRegion').classList.remove('visible');
+  g('nextBtn').style.display='none'; g('retryBtn').style.display='none';
+  g('askBtn').style.display='inline-flex'; g('askBtn').textContent='Submit to Companion →'; g('askBtn').disabled=false;
 
-<div class="divider"></div>
+  updateMap(); updateGradeBar(); updatePB();
+  setTimeout(()=>g('levelBadge').focus(),100);
+}
 
-<!-- REFERENCE TOOLS -->
-<div class="chapter-group ch-tools">
-  <div class="group-label">Reference Tools &amp; Labs</div>
-  <div class="app-grid">
-    <a class="app-card" href="ucp-metrics-reference.html">
-      <div class="app-card-head"><div class="app-card-icon">📐</div><div><div class="app-card-title">UCP Metrics Reference</div><div class="app-card-type">Technical Reference</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Complete technical documentation for every simulation metric: formulas, ranges, research grounding, and parameter interactions.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-reference">Reference</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="ucp-student-guide.html">
-      <div class="app-card-head"><div class="app-card-icon">📖</div><div><div class="app-card-title">Student Guide</div><div class="app-card-type">How to Use the Simulation</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Plain-language guide to running simulations, reading metrics, and connecting results to the course concepts.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-reference">Guide</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="metrics-calibration-lab.html">
-      <div class="app-card-head"><div class="app-card-icon">🧪</div><div><div class="app-card-title">Metrics Calibration Lab</div><div class="app-card-type">Interactive Lab</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Hands-on parameter exploration. Adjust worldview distributions and evidence architectures and watch metrics respond in real time.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-simulation">Lab</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="worldview-comparison.html">
-      <div class="app-card-head"><div class="app-card-icon">🌐</div><div><div class="app-card-title">Worldview Comparison</div><div class="app-card-type">Reference Tool</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Side-by-side comparison of the five worldview frameworks. What each sees, what each misses, and how they interact in the simulation.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-reference">Reference</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="trans-temporal-explorer.html">
-      <div class="app-card-head"><div class="app-card-icon">⏳</div><div><div class="app-card-title">Trans-Temporal Explorer</div><div class="app-card-type">Research Tool</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">Generational transmission of coordination capacity. How institutional patterns propagate across time and what degrades or improves them.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-reference">Research</span><span class="app-card-arrow">→</span></div>
-    </a>
-    <a class="app-card" href="cte-challenge.html">
-      <div class="app-card-head"><div class="app-card-icon">🏈</div><div><div class="app-card-title">CTE Challenge</div><div class="app-card-type">Case Study</div></div></div>
-      <div class="app-card-body"><div class="app-card-desc">The NFL's CTE crisis as a coordination failure case. Capability-based coordination in practice.</div></div>
-      <div class="app-card-footer"><span class="app-card-tag tag-case">Case Study</span><span class="app-card-arrow">→</span></div>
-    </a>
-  </div>
-</div>
+function g(id){return document.getElementById(id)}
 
-<div style="text-align:center;padding:2rem 0 1rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.2)">
-  Ethics Beyond Boundaries &middot; Saint Petersburg College &middot; Ethics Institute &middot; &copy; 2026
-</div>
+// Check for saved session on page load
+window.addEventListener('DOMContentLoaded', function(){
+  const saved = loadProgress();
+  if(saved && saved.name){
+    const banner = g('resumeBanner');
+    const desc = g('resumeDesc');
+    const savedDate = saved.savedAt
+      ? new Date(saved.savedAt).toLocaleString()
+      : 'recently';
+    if(banner && desc){
+      // Count how many verdicts were demonstrated
+      let done = 0;
+      if(saved.data){
+        Object.values(saved.data).forEach(r=>{ if(r.verdict==='demonstrated') done++; });
+      }
+      desc.textContent = saved.name + ' — saved ' + savedDate
+        + '. ' + done + ' of 18 question slots completed.';
+      banner.style.display = 'block';
+      // Pre-fill name field
+      const nameField = g('student-name');
+      if(nameField) nameField.value = saved.name;
+    }
+  }
+});
 
-</div>
+function doResume(){
+  const saved = loadProgress();
+  if(saved) resumeExam(saved);
+}
+
+function doFresh(){
+  if(confirm('This will clear your saved progress and start a new exam. Are you sure?')){
+    clearProgress();
+    g('resumeBanner').style.display = 'none';
+    g('student-name').value = '';
+  }
+}
+
+
+
+function toggleGuidance(){
+  const content=g('guidanceContent');
+  const arrow=g('guidanceArrow');
+  const btn=g('guidanceToggle');
+  const isOpen=content.style.display!=='none';
+  content.style.display=isOpen?'none':'block';
+  arrow.style.transform=isOpen?'':'rotate(90deg)';
+  btn.setAttribute('aria-expanded',String(!isOpen));
+}
+
+// Auto-open guidance when a new question loads
+function openGuidance(){
+  const content=g('guidanceContent');
+  const arrow=g('guidanceArrow');
+  const btn=g('guidanceToggle');
+  if(content&&content.style.display==='none'){
+    content.style.display='block';
+    arrow.style.transform='rotate(90deg)';
+    btn&&btn.setAttribute('aria-expanded','true');
+  }
+}
+
+
+function updateCC(){g('charCount').textContent=g('responseArea').value.length+' / 3000 characters';}
+
+// ── SUBMIT ─────────────────────────────────────────────────────────────────────
+async function submitResponse(){
+  const resp=g('responseArea').value.trim();
+  if(resp.length<60){alert('Please write a more complete response — at least a few sentences. Specific answers demonstrate more than general ones.');g('responseArea').focus();return;}
+  const dom=DOMAINS[S.di],lv=LEVELS[S.li],key=dk(dom.id,lv),rec=S.data[key];
+  rec.response=resp; rec.attempts++;
+  const btn=g('askBtn'); btn.disabled=true; btn.textContent='Companion is reading your response...';
+  const cr=g('companionRegion'); cr.classList.add('visible');
+  g('companionVerdict').textContent='';
+  g('companionText').textContent='Reading what you wrote...';
+  g('companionText').className='companion-text thinking';
+  const qs=dom.questions[lv];
+  const qText=qs[rec.questionIdx!==undefined ? rec.questionIdx : 0];
+
+  const controller=new AbortController();
+  const timeoutId=setTimeout(()=>controller.abort(),25000);
+
+  try{
+    const res=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},
+      signal:controller.signal,
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:700,
+        system:buildSys(dom,lv,rec.attempts>1),
+        messages:[{role:'user',content:buildMsg(qText,resp,rec.attempts>1,rec.response,rec.attempts)}]})});
+    clearTimeout(timeoutId);
+    const data=await res.json();
+    const reply=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('')||data.response||'';
+    const verdict=parseV(reply);
+    rec.verdict=verdict; rec.feedback=reply;
+    showVerdict(verdict,reply);
+    if(verdict==='demonstrated'){g('nextBtn').style.display='inline-flex';g('retryBtn').style.display='none';}
+    else{g('retryBtn').style.display='inline-flex';g('nextBtn').style.display='none';}
+    g('askBtn').style.display='none';
+    updateMap(); updateGradeBar();
+    saveProgress();
+  }catch(e){
+    clearTimeout(timeoutId);
+    btn.disabled=false; btn.textContent='Try Again →';
+    if(e.name==='AbortError'){
+      g('companionText').textContent='The server took too long. Please try again — it usually works on the second attempt.';
+    } else {
+      g('companionText').textContent='Could not reach the course backend. Please check your connection and try again.';
+    }
+    g('companionText').className='companion-text thinking';
+  }
+}
+
+function buildSys(dom,lv,isRetry){
+  const li={
+    recognition:`RECOGNITION — LOW BAR. The student just needs to show they genuinely understand the concept. They do NOT need to use the official EBB term. If they explain the idea clearly in their own words and show they understand why it matters, mark it DEMONSTRATED. Be generous. A student who says "it's like the lens you see the world through, shaped by how you were raised" has demonstrated recognition of PRF even without saying "Phenomenological Reference Frame." Only mark NOT YET if they are describing something completely unrelated.`,
+    application:`APPLICATION — MODERATE BAR. The student needs to connect the concept to the specific scenario. Accept genuine attempts that get the main idea right. If they miss a detail, ask ONE simple friendly question to help them add it.`,
+    integration:`INTEGRATION — PERSONAL CONNECTION. Accept any honest personal example that genuinely connects to the concept, even if the language is imprecise. The goal is that they have made the idea real and personal.`
+  };
+  return `You are the EBB Companion — a warm, encouraging conversation partner for freshman students in an Ethics Beyond Boundaries course at Saint Petersburg College. These students work full-time jobs, raise families, and many have never taken a philosophy course. Treat them with respect and patience.
+
+YOUR MOST IMPORTANT RULE: The guidance box told students "you don't need to use the exact technical term." You MUST honor this. If a student clearly understands the concept and explains it in their own words — even imprecisely — mark it DEMONSTRATED. Do NOT hold out for specific vocabulary.
+
+Domain: ${dom.name} | Level: ${LV_LABEL[lv]}
+${li[lv]}
+
+Start your response with exactly one verdict line:
+VERDICT: DEMONSTRATED
+VERDICT: PARTIALLY DEMONSTRATED
+VERDICT: NOT YET
+
+Then 2-3 warm plain sentences:
+- DEMONSTRATED: Say what they got right. Be specific and warm.
+- PARTIALLY DEMONSTRATED: Affirm what they showed. Ask ONE simple concrete question to help them add what's missing. No jargon in your question.
+- NOT YET: Be encouraging. Ask one very simple question anyone could answer from their own experience. Sound like a helpful tutor, not a grader.
+
+${isRetry?'IMPORTANT: This student has tried multiple times and is struggling. Lower your bar significantly. Accept approximate understanding. One more kind nudge — make it easy for them to succeed.':''}
+
+Under 100 words. Plain everyday language only. No academic jargon.`;
+}
+
+function buildMsg(q,resp,isRetry,prev,attempts){
+  let c='QUESTION:\n'+q+'\n\nSTUDENT RESPONSE:\n'+resp;
+  if(isRetry&&prev){
+    c+='\n\nNOTE: This is attempt #'+(attempts||2)+'. Previous response:\n'+prev;
+    if((attempts||2)>=3) c+='\n\nThis student has tried 3+ times. Please be very generous and help them over the line.';
+  }
+  return c;
+}
+
+function parseV(reply){
+  const u=reply.toUpperCase();
+  if(u.includes('VERDICT: DEMONSTRATED')&&!u.includes('PARTIALLY'))return'demonstrated';
+  if(u.includes('VERDICT: PARTIALLY'))return'partial';
+  if(u.includes('VERDICT: NOT YET'))return'notyet';
+  if(u.includes('DEMONSTRATED')&&!u.includes('PARTIALLY')&&!u.includes('NOT YET'))return'demonstrated';
+  return'partial';
+}
+
+function showVerdict(verdict,reply){
+  const vEl=g('companionVerdict'),tEl=g('companionText');
+  const display=reply.replace(/VERDICT:\s*(DEMONSTRATED|PARTIALLY DEMONSTRATED|NOT YET)/i,'').trim();
+  const map={demonstrated:['Demonstrated ✓','vd'],partial:['Partially Demonstrated','vp'],notyet:['Not Yet — Keep Going','vn']};
+  const[label,cls]=map[verdict]||map.partial;
+  vEl.textContent=label; vEl.className='companion-verdict '+cls;
+  tEl.textContent=display; tEl.className='companion-text';
+  vEl.setAttribute('tabindex','-1'); vEl.focus();
+}
+
+// ── NAV ────────────────────────────────────────────────────────────────────────
+function skipDomain(){
+  // Move to the first question of the next domain, skipping remaining levels
+  if(S.di < DOMAINS.length - 1){
+    S.di++;
+    S.li = 0;
+    saveProgress();
+    loadQ();
+  } else {
+    // On last domain — offer to submit
+    if(confirm('You are on the last section. Submit what you have completed?')){
+      generateCompletion();
+    }
+  }
+}
+
+// ── LOCALSTORAGE PERSISTENCE ──────────────────────────────────────────────────
+const SAVE_KEY = 'ebb_exam_v1';
+
+function saveProgress(){
+  if(!S.name) return;
+  try {
+    const snapshot = {
+      name: S.name,
+      startTime: S.startTime,
+      di: S.di,
+      li: S.li,
+      data: S.data,
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(snapshot));
+  } catch(e){ /* storage may be unavailable */ }
+}
+
+function loadProgress(){
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if(!raw) return null;
+    return JSON.parse(raw);
+  } catch(e){ return null; }
+}
+
+function clearProgress(){
+  try { localStorage.removeItem(SAVE_KEY); } catch(e){}
+}
+
+function resumeExam(snapshot){
+  S.name = snapshot.name;
+  S.startTime = snapshot.startTime ? new Date(snapshot.startTime) : new Date();
+  S.di = snapshot.di || 0;
+  S.li = snapshot.li || 0;
+  S.data = snapshot.data || {};
+  // Ensure all slots exist
+  DOMAINS.forEach(d=>LEVELS.forEach(l=>{
+    const k=dk(d.id,l);
+    if(!S.data[k]) S.data[k]={response:'',verdict:'',attempts:0,feedback:'',questionIdx:undefined};
+  }));
+  show('screen-question');
+  loadQ();
+}
+
+function confirmEarlySubmit(){
+  const grade=computeGrade();
+  const inProgress=grade.letter==='In Progress';
+  const msg=inProgress
+    ?`You haven't completed all the questions yet, so your current grade is In Progress. Your instructor will still see everything you've done.\n\nYou can also just close this tab and come back later to continue — but note that progress is only saved in this browser session.\n\nSubmit now with your current results?`
+    :`Your current grade is ${grade.letter}.\n${grade.desc}\n\nYou can keep going to try to improve it, or submit now. Submit with your current grade?`;
+  if(confirm(msg)) generateCompletion();
+}
+
+function advance(){
+  if(S.li<LEVELS.length-1){S.li++;}
+  else if(S.di<DOMAINS.length-1){S.di++;S.li=0;}
+  else{generateCompletion();return;}
+  saveProgress();
+  loadQ();
+}
+
+function retry(){
+  const dom=DOMAINS[S.di],lv=LEVELS[S.li],key=dk(dom.id,lv),rec=S.data[key];
+  g('prevWrap').style.display='block'; g('prevText').textContent=rec.response;
+  g('responseArea').value=''; g('charCount').textContent='0 / 3000 characters';
+  g('companionRegion').classList.remove('visible');
+  g('nextBtn').style.display='none'; g('retryBtn').style.display='none';
+  g('askBtn').style.display='inline-flex'; g('askBtn').disabled=false;
+  g('askBtn').textContent='Submit to Companion →';
+  g('responseArea').focus();
+}
+
+// ── PROGRESS ───────────────────────────────────────────────────────────────────
+function getV(did,lv){return S.data[dk(did,lv)]?.verdict||'';}
+
+function updateMap(){
+  const map=g('progressMap'); map.innerHTML='';
+  DOMAINS.forEach((d,di)=>{
+    const cell=document.createElement('div');
+    cell.className='domain-cell'; cell.setAttribute('role','listitem');
+    const title=document.createElement('div');
+    title.className='domain-cell-name';
+    const words=d.name.split(' ');
+    title.textContent='D'+d.id+': '+words.slice(0,3).join(' ')+(words.length>3?'…':'');
+    cell.appendChild(title);
+    const pips=document.createElement('div');
+    pips.className='pip-row'; pips.setAttribute('aria-label','Domain '+d.id+' progress');
+    LEVELS.forEach((l,li)=>{
+      const v=getV(d.id,l);
+      const isCurrent=(di===S.di&&li===S.li);
+      const pip=document.createElement('button');
+      pip.type='button';
+      pip.className='pip'+(v==='demonstrated'?' done':v==='partial'?' partial':'')+(isCurrent?' current':'');
+      pip.textContent=LV_LABEL[l][0];
+      pip.setAttribute('aria-label', LV_LABEL[l]+': '+(v||'not attempted')+(isCurrent?' (current)':' — click to go here'));
+      pip.title=(isCurrent?'Current: ':'')+d.name+' — '+LV_LABEL[l]+(v?' ('+v+')':' (not yet attempted)');
+      pip.style.cssText='cursor:pointer;font-family:var(--sans);border:none;padding:0;';
+      pip.onclick=(function(ddi,lli){return function(){navigateTo(ddi,lli);};})(di,li);
+      pips.appendChild(pip);
+    });
+    cell.appendChild(pips); map.appendChild(cell);
+  });
+}
+
+function navigateTo(di,li){
+  if(di===S.di && li===S.li) return;
+  const textarea=g('responseArea');
+  if(textarea && textarea.value.trim().length>10){
+    const key=dk(DOMAINS[S.di].id, LEVELS[S.li]);
+    if(S.data[key] && !S.data[key].response){
+      S.data[key].response='[Draft not submitted]';
+    }
+  }
+  S.di=di; S.li=li;
+  saveProgress();
+  loadQ();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function computeGrade(){
+  let r=0,a=0,i=0;
+  DOMAINS.forEach(d=>{
+    if(getV(d.id,'recognition')==='demonstrated')r++;
+    if(getV(d.id,'application')==='demonstrated')a++;
+    if(getV(d.id,'integration')==='demonstrated')i++;
+  });
+  if(r===6&&a===6&&i>=3)return{letter:'A',desc:'Recognition ✓ all 6 · Application ✓ all 6 · Integration ✓ '+i+' of 6'};
+  if(r===6&&a>=4)return{letter:'B',desc:'Recognition ✓ all 6 · Application ✓ '+a+' of 6'};
+  if(r===6)return{letter:'C',desc:'Recognition ✓ all 6'};
+  return{letter:'In Progress',desc:'Recognition demonstrated in '+r+' of 6 domains'};
+}
+
+function updateGradeBar(){
+  const grade=computeGrade();
+  g('topbar-grade').textContent='Grade: '+grade.letter;
+}
+
+function updatePB(){
+  const total=DOMAINS.length*LEVELS.length;
+  const done=S.di*3+S.li;
+  const pct=Math.round(done/total*100);
+  const fill=g('progressFill');
+  fill.style.width=pct+'%';
+  fill.parentElement.setAttribute('aria-valuenow',pct);
+}
+
+// ── COMPLETION ─────────────────────────────────────────────────────────────────
+function generateCompletion(){
+  clearProgress(); // exam is done — no need to save anymore
+  show('screen-completion');
+  const grade=computeGrade();
+  g('finalGradeLetter').textContent=grade.letter;
+  g('finalGradeLabel').textContent=grade.desc;
+  g('submissionTime').textContent=new Date().toLocaleString();
+  g('submissionName').textContent=S.name;
+  buildReport(); buildToken();
+}
+
+function buildReport(){
+  const el=g('competencyReport'); el.innerHTML='';
+  const hdr=document.createElement('div');
+  hdr.style.cssText='margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid var(--border)';
+  hdr.innerHTML='<p style="font-family:var(--sans);font-size:.9rem;color:var(--muted)">Student: <strong>'+esc(S.name)+'</strong> &nbsp;·&nbsp; Completed: <strong>'+new Date().toLocaleString()+'</strong></p>';
+  el.appendChild(hdr);
+  DOMAINS.forEach(d=>{
+    const sec=document.createElement('div'); sec.className='report-domain';
+    const title=document.createElement('div'); title.className='report-domain-title';
+    title.textContent='Domain '+d.id+': '+d.name; sec.appendChild(title);
+    LEVELS.forEach(lv=>{
+      const rec=S.data[dk(d.id,lv)]; if(!rec)return;
+      const item=document.createElement('div'); item.className='report-item';
+      const lvRow=document.createElement('div'); lvRow.className='report-item-level';
+      const lvSpan=document.createElement('span'); lvSpan.textContent=LV_LABEL[lv]; lvRow.appendChild(lvSpan);
+      if(rec.verdict){
+        const vSpan=document.createElement('span'); vSpan.className='rv';
+        const vm={demonstrated:['Demonstrated','background:var(--green-l);color:var(--green)'],
+          partial:['Partially Demonstrated','background:var(--amber-l);color:var(--amber)'],
+          notyet:['Not Yet','background:var(--red-l);color:var(--red)'],
+          '':['Not Attempted','background:var(--bg);color:var(--muted)']};
+        const[vl,vs]=vm[rec.verdict]||vm[''];
+        vSpan.textContent=vl; vSpan.setAttribute('style',vs); lvRow.appendChild(vSpan);
+      }
+      item.appendChild(lvRow);
+      if(rec.response){
+        const resp=document.createElement('div'); resp.className='report-item-response';
+        resp.textContent=rec.response.length>500?rec.response.substring(0,500)+'…':rec.response;
+        item.appendChild(resp);
+      }else{
+        const na=document.createElement('div');
+        na.style.cssText='font-size:.9rem;color:var(--muted);font-style:italic;margin-top:.25rem';
+        na.textContent='Not attempted'; item.appendChild(na);
+      }
+      sec.appendChild(item);
+    });
+    el.appendChild(sec);
+  });
+}
+
+function buildToken(){
+  const payload={v:2,student:S.name,submitted:new Date().toISOString(),
+    started:S.startTime?.toISOString(),grade:computeGrade(),responses:{}};
+  DOMAINS.forEach(d=>{LEVELS.forEach(lv=>{
+    const key=dk(d.id,lv),rec=S.data[key];
+    payload.responses[key]={domain:d.name,level:lv,
+      response:rec?.response||'',verdict:rec?.verdict||'',
+      attempts:rec?.attempts||0,feedback:rec?.feedback||''};
+  });});
+  const json=JSON.stringify(payload);
+  const encoded=btoa(unescape(encodeURIComponent(json)));
+  const hash=h32(json);
+  g('tokenBox').textContent='EBB-EXAM-v2:'+hash+':'+encoded;
+}
+
+function h32(s){
+  let h=5381;
+  for(let i=0;i<s.length;i++){h=((h<<5)+h)^s.charCodeAt(i);h=h>>>0;}
+  return h.toString(16).toUpperCase().padStart(8,'0');
+}
+
+function copyToken(){
+  const t=g('tokenBox').textContent;
+  navigator.clipboard.writeText(t).then(()=>{
+    const btn=document.querySelector('[onclick="copyToken()"]');
+    if(btn){btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy Token to Clipboard',2500);}
+  });
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+</script>
 </body>
 </html>
